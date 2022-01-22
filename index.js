@@ -6,7 +6,7 @@ const path = require("path"); //This is important for Require Path.
 const SignUp = require("./Routes/SignUp"); // Requiring SignUp.js
 
 // DATABASE CONNECTION CODE -------STARTED
-const url = process.env.MONGODB;
+const url = `mongodb+srv://alok:alok@cluster0.fplw1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const connectionParams = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -23,6 +23,6 @@ mongoose
 // DATABASE CONNECTION CODE -------ENDED
 
 app.use(express.json());
-app.use("/", SignUp);
+app.use("/api/user", SignUp);
 
 app.listen(process.env.PORT);
