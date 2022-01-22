@@ -5,22 +5,16 @@ const CarInfo = require("../models/CarInfo");
 const bcrypt = require("bcryptjs");
 const multer = require("multer");
 const Tesseract = require("tesseract.js");
-
+var bodyParser = require("body-parser");
 // This is importmant for Router Important
 const router = express.Router();
+// create application/json parser
+var jsonParser = bodyParser.json();
+// create application/x-www-form-urlencoded parser
+var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "./uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.originalname);
-  },
-});
-
-const upload = multer({ storage: storage });
-
-router.post("/login", async (req, res) => {
+router.post("/login", urlencodedParser, async (req, res) => {
+  console.log(req.body);
   try {
     var Email = req.body.Email;
     var Password = req.body.Password;
@@ -35,6 +29,17 @@ router.post("/login", async (req, res) => {
     res.send(error);
   }
 });
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "./uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
 
 router.post("/detect", upload.single("uploadImage"), async (req, res) => {
   try {
@@ -82,10 +87,10 @@ router.post("/carinfo", async (req, res) => {
 });
 
 router.post("/signup", async (req, res) => {
-  var salt = bcrypt.genSaltSync(10);
-  var hashPassword = bcrypt.hashSync(req.body.Password, salt);
-  var confirmPassword = bcrypt.hashSync(req.body.ConfirmPassword, salt);
-
+  // var salt = bcrypt.genSaltSync(10);
+  // var hashPassword = bcrypt.hashSync(req.body.Password, salt);
+  // var confirmPassword = bcrypt.hashSync(req.body.ConfirmPassword, salt);
+  console.log(this.Data);
   if (req.body.Password != req.body.ConfirmPassword) {
     res.send("Your Password Does Not Match");
   }
@@ -95,8 +100,8 @@ router.post("/signup", async (req, res) => {
     LastName: req.body.LastName,
     Email: req.body.Email,
     PhoneNumber: req.body.PhoneNumber,
-    Password: hashPassword,
-    ConfirmPassword: confirmPassword,
+    Password: req.body.Password,
+    ConfirmPassword: req.body.ConfirmPassword,
   });
   try {
     let data = await Data.save();
