@@ -1,0 +1,18 @@
+<div class="containerxz">
+  <div class="file-upload-container">
+    <div class="option">
+      <p>Click on the "Choose File" button to upload a file:</p>
+
+      <form
+        action="/api/user/detect"
+        method="post"
+        enctype="multipart/form-data"
+      >
+        <input type="file" name="uploadImage" />
+        <input class="submit-btn" type="submit" />
+      </form>
+    </div>
+
+  </div>
+  <h1 class="resulttab">{{result}}</h1>
+</div>

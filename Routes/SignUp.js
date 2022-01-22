@@ -16,6 +16,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });
 router.get("/login", (req, res) => {
   res.render("login");
 });
+
 router.get("/signup", (req, res) => {
   res.render("signup");
 });
@@ -28,7 +29,7 @@ router.post("/login", urlencodedParser, async (req, res) => {
     const UserData = await SignUpData.findOne({ Email: Email });
     const match = bcrypt.compareSync(Password, UserData.Password);
     if (match == true) {
-      res.send("login Successful");
+      res.render("dashboard");
     } else {
       res.send("Invailid Username Or Password");
     }
@@ -60,21 +61,22 @@ router.post("/detect", upload.single("uploadImage"), async (req, res) => {
       var string2 = string.replace(/[\r\n]+/gm, "");
       const UserData = await CarInfo.findOne({ Car: string2 });
       if (UserData == null) {
-        return res.json({
-          message: false,
+        return res.render("dashboard", {
+          result: "Failed",
         });
       } else if (string2 === UserData.Car) {
-        return res.json({
-          message: true,
+        return res.render("dashboard", {
+          result: "Authenticated",
         });
       } else {
-        return res.json({
-          message: false,
+        return res.render("dashboard", {
+          result: "Failed",
         });
       }
     });
   } catch (error) {
-    res.send(false);
+    res.send(error);
+    console.log(error);
   }
 });
 
