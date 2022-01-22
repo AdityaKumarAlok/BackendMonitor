@@ -13,6 +13,13 @@ var jsonParser = bodyParser.json();
 // create application/x-www-form-urlencoded parser
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
+router.get("/login", (req, res) => {
+  res.render("login");
+});
+router.get("/signup", (req, res) => {
+  res.render("signup");
+});
+
 router.post("/login", urlencodedParser, async (req, res) => {
   console.log(req.body);
   try {
@@ -86,11 +93,11 @@ router.post("/carinfo", async (req, res) => {
   }
 });
 
-router.post("/signup", async (req, res) => {
-  // var salt = bcrypt.genSaltSync(10);
-  // var hashPassword = bcrypt.hashSync(req.body.Password, salt);
-  // var confirmPassword = bcrypt.hashSync(req.body.ConfirmPassword, salt);
-  console.log(this.Data);
+router.post("/signup", urlencodedParser, async (req, res) => {
+  console.log(req.body.FirstName);
+  var salt = bcrypt.genSaltSync(10);
+  var hashPassword = bcrypt.hashSync(req.body.Password, salt);
+  var confirmPassword = bcrypt.hashSync(req.body.ConfirmPassword, salt);
   if (req.body.Password != req.body.ConfirmPassword) {
     res.send("Your Password Does Not Match");
   }
@@ -100,8 +107,8 @@ router.post("/signup", async (req, res) => {
     LastName: req.body.LastName,
     Email: req.body.Email,
     PhoneNumber: req.body.PhoneNumber,
-    Password: req.body.Password,
-    ConfirmPassword: req.body.ConfirmPassword,
+    Password: hashPassword,
+    ConfirmPassword: confirmPassword,
   });
   try {
     let data = await Data.save();
@@ -109,10 +116,6 @@ router.post("/signup", async (req, res) => {
   } catch (err) {
     console.log("This is the error" + err);
   }
-});
-
-router.get("/login", (req, res) => {
-  res.render("login");
 });
 
 module.exports = router;

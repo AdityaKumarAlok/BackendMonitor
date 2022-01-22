@@ -15,7 +15,7 @@
             <div class="col-md-6 col-lg-7 d-flex align-items-center">
               <div class="card-body p-4 p-lg-5 text-black">
 
-                <form action="/api/user/login" method="post">
+                <form action="/api/user/signup" method="post">
 
                   <div class="d-flex align-items-center mb-3 pb-1">
                     <i
@@ -32,14 +32,50 @@
 
                   <div class="form-outline mb-4">
                     <input
-                      type="email"
-                      name="Email"
+                      type="text"
+                      name="FirstName"
                       id="form2Example17"
                       class="form-control form-control-lg"
                     />
-                    <label class="form-label" for="form2Example17">Email address</label>
+                    <label
+                      class="form-label"
+                      for="form2Example17"
+                    >FirstName</label>
                   </div>
 
+                  <div class="form-outline mb-4">
+                    <input
+                      type="text"
+                      name="LastName"
+                      id="form2Example27"
+                      class="form-control form-control-lg"
+                    />
+                    <label
+                      class="form-label"
+                      for="form2Example27"
+                    >LastName</label>
+                  </div>
+                  <div class="form-outline mb-4">
+                    <input
+                      type="email"
+                      name="Email"
+                      id="form2Example27"
+                      class="form-control form-control-lg"
+                    />
+                    <label class="form-label" for="form2Example27">Email</label>
+                  </div>
+                  <div class="form-outline mb-4">
+                    <input
+                      type="text"
+                      name="PhoneNumber"
+                      id="form2Example27"
+                      class="form-control form-control-lg"
+                    />
+                    <label
+                      class="form-label"
+                      for="form2Example27"
+                    >PhoneNumber</label>
+                  </div>
                   <div class="form-outline mb-4">
                     <input
                       type="password"
@@ -51,6 +87,18 @@
                       class="form-label"
                       for="form2Example27"
                     >Password</label>
+                  </div>
+                  <div class="form-outline mb-4">
+                    <input
+                      type="password"
+                      name="ConfirmPassword"
+                      id="form2Example27"
+                      class="form-control form-control-lg"
+                    />
+                    <label
+                      class="form-label"
+                      for="form2Example27"
+                    >ConfirmPassword</label>
                   </div>
 
                   <div class="pt-1 mb-4">
