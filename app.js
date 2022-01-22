@@ -5,6 +5,11 @@ const mongoose = require("mongoose");
 const path = require("path"); //This is important for Require Path.
 const SignUp = require("./Routes/SignUp"); // Requiring SignUp.js
 const Admin = require("./Routes/Admin"); // Requiring SignUp.js
+const engine = require("express-handlebars");
+app.use(express.static(path.join(__dirname, "static")));
+app.engine("handlebars", engine());
+app.set("view engine", "handlebars");
+app.set("views", "./views");
 
 // DATABASE CONNECTION CODE -------STARTED
 const url = `mongodb+srv://alok:alok@cluster0.fplw1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;

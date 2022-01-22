@@ -20,6 +20,22 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+router.post("/login", async (req, res) => {
+  try {
+    var Email = req.body.Email;
+    var Password = req.body.Password;
+    const UserData = await SignUpData.findOne({ Email: Email });
+    const match = bcrypt.compareSync(Password, UserData.Password);
+    if (match == true) {
+      res.send("login Successful");
+    } else {
+      res.send("Invailid Username Or Password");
+    }
+  } catch (error) {
+    res.send(error);
+  }
+});
+
 router.post("/detect", upload.single("uploadImage"), async (req, res) => {
   try {
     Tesseract.recognize("uploads/" + req.file.filename, "eng", {
@@ -90,20 +106,8 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-router.post("/login", async (req, res) => {
-  try {
-    var Email = req.body.Email;
-    var Password = req.body.Password;
-    const UserData = await SignUpData.findOne({ Email: Email });
-    const match = bcrypt.compareSync(Password, UserData.Password);
-
-    if (match == true) {
-      res.send("You Are Login");
-    } else {
-      res.send("Invailid Username Or Password");
-    }
-  } catch (error) {
-    res.send(error);
-  }
+router.get("/login", (req, res) => {
+  res.render("login");
 });
+
 module.exports = router;
