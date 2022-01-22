@@ -1,13 +1,68 @@
 const express = require("express");
 const req = require("express/lib/request");
 const SignUpData = require("../models/Signup");
+const CarInfo = require("../models/CarInfo");
 const bcrypt = require("bcryptjs");
+const multer = require("multer");
+const Tesseract = require("tesseract.js");
 
 // This is importmant for Router Important
 const router = express.Router();
 
-router.get("/signup", (req, res) => {
-  res.send("Hello");
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "./uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
+
+router.post("/detect", upload.single("uploadImage"), async (req, res) => {
+  try {
+    Tesseract.recognize("uploads/" + req.file.filename, "eng", {
+      logger: (m) => console.log(m),
+    }).then(async ({ data: { text } }) => {
+      var txt = text;
+      var string = txt
+        .replace(/[&\/\\#,+()$~%.'"[':*?<>@^{} ]/g, "")
+        .toString();
+      var string2 = string.replace(/[\r\n]+/gm, "");
+      const UserData = await CarInfo.findOne({ Car: string2 });
+      if (UserData == null) {
+        return res.json({
+          message: false,
+        });
+      } else if (string2 === UserData.Car) {
+        return res.json({
+          message: true,
+        });
+      } else {
+        return res.json({
+          message: false,
+        });
+      }
+    });
+  } catch (error) {
+    res.send(false);
+  }
+});
+
+router.post("/carinfo", async (req, res) => {
+  var Data = new CarInfo({
+    Name: req.body.Name,
+    Flat: req.body.Flat,
+    Apartment: req.body.Apartment,
+    Car: req.body.Car,
+  });
+  try {
+    let data = await Data.save();
+    res.send(data);
+  } catch (err) {
+    console.log("This is the error" + err);
+  }
 });
 
 router.post("/signup", async (req, res) => {
