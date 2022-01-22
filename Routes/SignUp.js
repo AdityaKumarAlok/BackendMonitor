@@ -13,12 +13,19 @@ router.get("/signup", (req, res) => {
 router.post("/signup", async (req, res) => {
   var salt = bcrypt.genSaltSync(10);
   var hashPassword = bcrypt.hashSync(req.body.Password, salt);
+  var confirmPassword = bcrypt.hashSync(req.body.ConfirmPassword, salt);
+
+  if (req.body.Password != req.body.ConfirmPassword) {
+    res.send("Your Password Does Not Match");
+  }
 
   var Data = new SignUpData({
     FirstName: req.body.FirstName,
     LastName: req.body.LastName,
     Email: req.body.Email,
+    PhoneNumber: req.body.PhoneNumber,
     Password: hashPassword,
+    ConfirmPassword: confirmPassword,
   });
   try {
     let data = await Data.save();

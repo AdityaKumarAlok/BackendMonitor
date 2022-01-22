@@ -17,7 +17,15 @@ var SignUpData = new Schema({
     type: String,
     required: true,
   },
+  PhoneNumber: {
+    type: String,
+    required: true,
+  },
   Password: {
+    type: String,
+    required: true,
+  },
+  ConfirmPassword: {
     type: String,
     required: true,
   },
